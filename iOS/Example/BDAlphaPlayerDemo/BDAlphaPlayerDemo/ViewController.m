@@ -48,7 +48,7 @@
     
     BDAlphaPlayerMetalConfiguration *configuration = [BDAlphaPlayerMetalConfiguration defaultConfiguration];
     NSString *testResourcePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"TestResource"];
-    NSString *directory = [testResourcePath stringByAppendingPathComponent:@"heartbeats"];
+    NSString *directory = [testResourcePath stringByAppendingPathComponent:@"gift"];
     configuration.directory = directory;
     configuration.renderSuperViewFrame = self.view.frame;
     configuration.orientation = BDAlphaPlayerOrientationPortrait;
