@@ -75,6 +75,7 @@
 {
     self.mtkView.paused = YES;
     self.mtkView.delegate = self;
+    self.mtkView.opaque = NO;
     CVMetalTextureCacheCreate(NULL, NULL, self.mtkView.device, NULL, &_textureCache);
     [self setupVertex];
     [self setupPipeline];
@@ -91,6 +92,13 @@
     
     vector_float3 kColorConversion601FullRangeOffset = (vector_float3){ 0, -0.5, -0.5};
     
+//    // BT.709, which is the standard for HDTV.
+//    matrix_float3x3 kColorConversion709FullRangeMatrix = (matrix_float3x3){
+//        (simd_float3){1.164,  1.164, 1.164},
+//        (simd_float3){0.0, -0.213, 2.112},
+//        (simd_float3){1.793, -0.533,   0.0},
+//    };
+//    
     BDAlphaPlayerConvertMatrix matrix;
     matrix.matrix = kColorConversion601FullRangeMatrix;
     matrix.offset = kColorConversion601FullRangeOffset;
@@ -132,11 +140,11 @@
     pipelineStateDescriptor.colorAttachments[0].pixelFormat = self.mtkView.colorPixelFormat;
     pipelineStateDescriptor.colorAttachments[0].blendingEnabled = true;
     pipelineStateDescriptor.colorAttachments[0].rgbBlendOperation = MTLBlendOperationAdd;
-    pipelineStateDescriptor.colorAttachments[0].sourceRGBBlendFactor = MTLBlendFactorOne;
-    pipelineStateDescriptor.colorAttachments[0].destinationRGBBlendFactor = MTLBlendFactorOne;
-    pipelineStateDescriptor.colorAttachments[0].alphaBlendOperation = MTLBlendOperationMin;
-    pipelineStateDescriptor.colorAttachments[0].sourceAlphaBlendFactor = MTLBlendFactorOne;
-    pipelineStateDescriptor.colorAttachments[0].destinationAlphaBlendFactor = MTLBlendFactorOne;
+    pipelineStateDescriptor.colorAttachments[0].alphaBlendOperation = MTLBlendOperationAdd;
+    pipelineStateDescriptor.colorAttachments[0].sourceRGBBlendFactor = MTLBlendFactorSourceAlpha;
+    pipelineStateDescriptor.colorAttachments[0].sourceAlphaBlendFactor = MTLBlendFactorSourceAlpha;
+    pipelineStateDescriptor.colorAttachments[0].destinationRGBBlendFactor = MTLBlendFactorOneMinusBlendAlpha;
+    pipelineStateDescriptor.colorAttachments[0].destinationAlphaBlendFactor = MTLBlendFactorZero;
     self.pipelineState = [self.mtkView.device newRenderPipelineStateWithDescriptor:pipelineStateDescriptor error:NULL];
     self.commandQueue = [self.mtkView.device newCommandQueue];
 }

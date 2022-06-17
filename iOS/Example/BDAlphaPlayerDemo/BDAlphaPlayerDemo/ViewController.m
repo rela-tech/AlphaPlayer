@@ -24,6 +24,10 @@
     // Do any additional setup after loading the view.
     [super viewDidLoad];
     
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IMG_0042"]];
+    backgroundImageView.frame = self.view.bounds;
+    [self.view addSubview:backgroundImageView];
+    
     self.startBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, 100, 60, 60)];
     self.startBtn.backgroundColor = [UIColor orangeColor];
     [self.startBtn setTitle:@"start" forState:UIControlStateNormal];
@@ -41,7 +45,7 @@
 {
     if (!self.metalView) {
         self.metalView = [[BDAlphaPlayerMetalView alloc] initWithDelegate:self];
-        [self.view insertSubview:self.metalView atIndex:0];
+        [self.view insertSubview:self.metalView atIndex:1];
     }
     self.startBtn.hidden = YES;
     self.stopBtn.alpha = 0.3;
@@ -49,6 +53,7 @@
     BDAlphaPlayerMetalConfiguration *configuration = [BDAlphaPlayerMetalConfiguration defaultConfiguration];
     NSString *testResourcePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"TestResource"];
     NSString *directory = [testResourcePath stringByAppendingPathComponent:@"gift"];
+//    NSString *directory = [testResourcePath stringByAppendingPathComponent:@"heartbeats"];
     configuration.directory = directory;
     configuration.renderSuperViewFrame = self.view.frame;
     configuration.orientation = BDAlphaPlayerOrientationPortrait;
